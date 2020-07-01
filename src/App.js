@@ -7,43 +7,48 @@ import GlobalStyles from 'index.css';
 import theme from 'utils/theme';
 import routes from 'utils/routes';
 
+import { Provider as StoreProvider } from 'react-redux';
+import configureStore from 'state/store'
+
 import { Navigation, Wrapper, LoadingIndicator, Button } from 'components'
 
 function App() {
   const { i18n } = useTranslation()
   return (
     <>
-      <GlobalStyles />
-      <Router>
-        <Navigation routes={routes} RightButtons={(
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button variant='regular' onClick={() => i18n.changeLanguage('pl')}>pl</Button>
-            <Button variant='regular' onClick={() => i18n.changeLanguage('en')}>en</Button>
-          </div>
-        )} />
-        <Wrapper>
-          <Switch>
-            <Route path='/' exact>
-              Home
+      <Navigation routes={routes} RightButtons={(
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Button variant='regular' onClick={() => i18n.changeLanguage('pl')}>pl</Button>
+          <Button variant='regular' onClick={() => i18n.changeLanguage('en')}>en</Button>
+        </div>
+      )} />
+      <Wrapper>
+        <Switch>
+          <Route path='/' exact>
+            Home
             </Route>
-            <Route path='/budget'>
-              Budget
+          <Route path='/budget'>
+            Budget
             </Route>
-          </Switch>
-        </Wrapper>
-      </Router>
+        </Switch>
+      </Wrapper>
     </>
-
   );
 }
 
 function RootApp() {
+  const store = configureStore()
   return (
-    <ThemeProvider theme={theme}>
-      <Suspense fallback={<LoadingIndicator />}>
-        <App />
-      </Suspense>
-    </ThemeProvider>
+    <StoreProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <Router>
+          <Suspense fallback={<LoadingIndicator />}>
+            <App />
+          </Suspense>
+        </Router>
+      </ThemeProvider>
+    </StoreProvider>
   )
 }
 

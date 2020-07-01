@@ -11,11 +11,9 @@ const spinner = keyframes`
 
 export const Outer = styled.div`
    position: absolute;
-   top: 40vh;
+   top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
-   display: inline-block;
-   position: relative;
    width: 80px;
    height: 80px;
 `

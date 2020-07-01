@@ -21,7 +21,6 @@ const Button = ({ ...props }) => {
          {children}
       </Element>
    ), [props, children])
-   // console.log({ ...props })
    return to ? <Link {...props}>{content}</Link> : <>{content}</>;
 }
 

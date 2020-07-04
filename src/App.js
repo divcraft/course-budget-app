@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,18 @@ import theme from 'utils/theme';
 import routes from 'utils/routes';
 
 import { Provider as StoreProvider } from 'react-redux';
-import configureStore from 'store'
+import configureStore from 'store';
+import { connect } from 'react-redux';
+import { fetchBudget, fetchBudgetedCategories } from 'store/actions';
 
 import { Navigation, Wrapper, LoadingIndicator, Button } from 'components'
 
-function App() {
+function App({ budget, budgetCategories, fetchBudget, fetchBudgetedCategories }) {
   const { i18n } = useTranslation()
+  useEffect(() => {
+    fetchBudget(1)
+    fetchBudgetedCategories(1)
+  }, [fetchBudget, fetchBudgetedCategories])
   return (
     <>
       <Navigation routes={routes} RightButtons={(
@@ -26,7 +32,20 @@ function App() {
         <Switch>
           <Route path='/' exact>
             Home
-            </Route>
+            <div style={{ paddingTop: 20 }}>
+              <p>{budget.id}</p>
+              <p>{budget.name}</p>
+              <p>{budget.totalAmount}</p>
+              <ul>
+                {budget.transactions && budget.transactions.map((transaction, index) => (
+                  <li key={index}>
+                    <p>{transaction.description}</p>
+                    <p>{transaction.amount}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Route>
           <Route path='/budget'>
             Budget
             </Route>
@@ -36,6 +55,18 @@ function App() {
   );
 }
 
+const ConnectedApp = connect(state => {
+  console.log(state)
+  const { budget, budgetCategories } = state.budget
+  return {
+    budget,
+    budgetCategories
+  }
+}, {
+  fetchBudget,
+  fetchBudgetedCategories
+})(App)
+
 function RootApp() {
   const store = configureStore()
   return (
@@ -44,7 +75,7 @@ function RootApp() {
         <GlobalStyles />
         <Router>
           <Suspense fallback={<LoadingIndicator />}>
-            <App />
+            <ConnectedApp />
           </Suspense>
         </Router>
       </ThemeProvider>

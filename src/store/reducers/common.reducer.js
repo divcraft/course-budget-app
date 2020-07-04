@@ -1,5 +1,4 @@
 import {
-   // ALL_CATEGORIES_GET,
    ALL_CATEGORIES_GET_REQUEST,
    ALL_CATEGORIES_GET_SUCCESS,
    ALL_CATEGORIES_GET_FAILURE,
@@ -17,10 +16,6 @@ function common(state = initialState, action) {
    }
 
    switch (action.type) {
-      // case BUDGET_GET:
-      //    return {
-      //       ...state,
-      //    }
       case ALL_CATEGORIES_GET_REQUEST:
          return {
             ...state,

@@ -1,45 +1,46 @@
 import {
-   // BUDGET_GET,
-   BUDGET_GET_REQUEST,
-   BUDGET_GET_SUCCESS,
-   BUDGET_GET_FAILURE,
+   // ALL_CATEGORIES_GET,
+   ALL_CATEGORIES_GET_REQUEST,
+   ALL_CATEGORIES_GET_SUCCESS,
+   ALL_CATEGORIES_GET_FAILURE,
    LOADING_STATES
-} from 'state/constants'
+} from 'store/constants'
 
 const initialState = {
    loadingState: {},
-   budget: {},
-   budgetCategories: [],
+   allCategories: [],
 }
 
-function budget(state = initialState, action) {
-   const newLoadingState = { ...state.loadingState }
+function common(state = initialState, action) {
+   const newLoadingState = {
+      ...state.loadingState
+   }
 
    switch (action.type) {
       // case BUDGET_GET:
       //    return {
       //       ...state,
       //    }
-      case BUDGET_GET_REQUEST:
+      case ALL_CATEGORIES_GET_REQUEST:
          return {
             ...state,
             loadingState: {
                ...state.loadingState,
-               BUDGET_GET_REQUEST: LOADING_STATES.LOADING
+               ALL_CATEGORIES_GET_REQUEST: LOADING_STATES.LOADING
             }
          }
-      case BUDGET_GET_SUCCESS:
+      case ALL_CATEGORIES_GET_SUCCESS:
          delete newLoadingState.BUDGET_GET_REQUEST
          return {
             ...state,
-            budget: action.payload,
+            allCategories: action.payload,
             loadingState: newLoadingState
          }
-      case BUDGET_GET_FAILURE:
+      case ALL_CATEGORIES_GET_FAILURE:
          delete newLoadingState.BUDGET_GET_REQUEST
          return {
             ...state,
-            budget: {},
+            allCategories: [],
             loadingState: newLoadingState
          }
       default:
@@ -47,4 +48,4 @@ function budget(state = initialState, action) {
    }
 }
 
-export default budget
+export default common

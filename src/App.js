@@ -8,7 +8,7 @@ import theme from 'utils/theme';
 import routes from 'utils/routes';
 
 import { Provider as StoreProvider } from 'react-redux';
-import configureStore from 'state/store'
+import configureStore from 'store'
 
 import { Navigation, Wrapper, LoadingIndicator, Button } from 'components'
 

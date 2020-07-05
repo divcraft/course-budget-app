@@ -1,46 +1,69 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+
+import { connect } from 'react-redux';
+import { fetchBudget, fetchBudgetedCategories, fetchAllCategories } from 'store/actions';
 
 import { FlexContainer } from './Budget.css'
 
-import { connect } from 'react-redux';
-import { fetchBudget, fetchBudgetedCategories } from 'store/actions';
+import LoadingIndicator from 'components/LoadingIndicator'
 
-const Budget = ({ budget, budgetCategories, fetchBudget, fetchBudgetedCategories }) => {
+const Budget = ({ budget, budgetCategories, allCategories, budgetLoader, commonLoader,
+   fetchBudget, fetchBudgetedCategories, fetchAllCategories }) => {
    useEffect(() => {
       fetchBudget(1)
       fetchBudgetedCategories(1)
-   }, [fetchBudget, fetchBudgetedCategories])
+      fetchAllCategories()
+   }, [fetchBudget, fetchBudgetedCategories, fetchAllCategories])
+   const isBudgetLoaded = useMemo(() => !!budgetLoader && Object.keys(budgetLoader).length === 0, [budgetLoader])
+   const isCommonLoaded = useMemo(() => !!commonLoader && Object.keys(commonLoader).length === 0, [commonLoader])
+   isBudgetLoaded ? console.log(budget, budgetCategories) : console.log('loading budget...')
+   isCommonLoaded ? console.log(allCategories) : console.log('loading allCategories...')
    return (
       <>
          <FlexContainer>
-            <section>section 1</section>
-            <section>section 2</section>
+            <section>
+               {isBudgetLoaded ? (
+                  <>
+                     <p>{budget.id}</p>
+                     <p>{budget.name}</p>
+                     <p>{budget.totalAmount}</p>
+                  </>
+               ) : (
+                     <LoadingIndicator />
+                  )}
+            </section>
+            <section>
+               {isCommonLoaded ? (
+                  <ul>
+                     {allCategories.map(category => (
+                        <li key={category.id}>
+                           <p>{category.name}</p>
+                        </li>
+                     ))}
+                  </ul>
+               ) : (
+                     <LoadingIndicator />
+                  )}
+            </section>
          </FlexContainer>
-         <div style={{ paddingTop: 20 }}>
-            <p>{budget.id}</p>
-            <p>{budget.name}</p>
-            <p>{budget.totalAmount}</p>
-            <ul>
-               {budget.transactions && budget.transactions.map((transaction, index) => (
-                  <li key={index}>
-                     <p>{transaction.description}</p>
-                     <p>{transaction.amount}</p>
-                  </li>
-               ))}
-            </ul>
-         </div>
+
       </>
    );
 }
 
 export default connect(state => {
    const { budget, budgetCategories } = state.budget
+   const { allCategories } = state.common
    return {
       budget,
-      budgetCategories
+      budgetCategories,
+      allCategories,
+      budgetLoader: state.budget.loadingState,
+      commonLoader: state.common.loadingState
    }
 }, {
    fetchBudget,
-   fetchBudgetedCategories
+   fetchBudgetedCategories,
+   fetchAllCategories
 })(Budget)
 

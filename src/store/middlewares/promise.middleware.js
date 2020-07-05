@@ -11,10 +11,6 @@ function promiseMiddleware() {
          const SUCCESS = `${type}_SUCCESS`
          const FAILURE = `${type}_FAILURE`
 
-         next({
-            type: REQUEST
-         })
-
          try {
             const response = await promise
             const data = await response.json()
@@ -28,6 +24,12 @@ function promiseMiddleware() {
                payload: err
             })
          }
+
+         next({
+            type: REQUEST
+         })
+
+
       }
    }
 }

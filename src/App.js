@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -9,17 +9,12 @@ import routes from 'utils/routes';
 
 import { Provider as StoreProvider } from 'react-redux';
 import configureStore from 'store';
-import { connect } from 'react-redux';
-import { fetchBudget, fetchBudgetedCategories } from 'store/actions';
 
 import { Navigation, Wrapper, LoadingIndicator, Button } from 'components'
+import BudgetPage from 'pages/Budget'
 
-function App({ budget, budgetCategories, fetchBudget, fetchBudgetedCategories }) {
+function App() {
   const { i18n } = useTranslation()
-  useEffect(() => {
-    fetchBudget(1)
-    fetchBudgetedCategories(1)
-  }, [fetchBudget, fetchBudgetedCategories])
   return (
     <>
       <Navigation routes={routes} RightButtons={(
@@ -32,40 +27,15 @@ function App({ budget, budgetCategories, fetchBudget, fetchBudgetedCategories })
         <Switch>
           <Route path='/' exact>
             Home
-            <div style={{ paddingTop: 20 }}>
-              <p>{budget.id}</p>
-              <p>{budget.name}</p>
-              <p>{budget.totalAmount}</p>
-              <ul>
-                {budget.transactions && budget.transactions.map((transaction, index) => (
-                  <li key={index}>
-                    <p>{transaction.description}</p>
-                    <p>{transaction.amount}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </Route>
           <Route path='/budget'>
-            Budget
-            </Route>
+            <BudgetPage />
+          </Route>
         </Switch>
       </Wrapper>
     </>
   );
 }
-
-const ConnectedApp = connect(state => {
-  console.log(state)
-  const { budget, budgetCategories } = state.budget
-  return {
-    budget,
-    budgetCategories
-  }
-}, {
-  fetchBudget,
-  fetchBudgetedCategories
-})(App)
 
 function RootApp() {
   const store = configureStore()
@@ -75,7 +45,7 @@ function RootApp() {
         <GlobalStyles />
         <Router>
           <Suspense fallback={<LoadingIndicator />}>
-            <ConnectedApp />
+            <App />
           </Suspense>
         </Router>
       </ThemeProvider>

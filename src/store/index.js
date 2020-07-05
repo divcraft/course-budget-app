@@ -1,14 +1,15 @@
 import { applyMiddleware, createStore } from 'redux'
-import thunkMiddleware from 'redux-thunk'
+// import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-// import monitorReducersEnhancer from './enhancers/monitorReducers'
 // import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
+import promiseMiddleware from 'store/middlewares/promise.middleware'
 
 export default function configureStore(preloadedState) {
    const middlewares = [
-      thunkMiddleware
+      // thunkMiddleware,
+      promiseMiddleware
    ]
    const middlewareEnhancer = applyMiddleware(...middlewares)
 

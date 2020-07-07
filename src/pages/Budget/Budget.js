@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import CategoryList from 'components/CategoryList'
 
 import { connect } from 'react-redux';
 import { fetchBudget, fetchBudgetedCategories, fetchAllCategories } from 'store/actions';
@@ -16,10 +17,11 @@ const Budget = ({ budget, budgetCategories, allCategories, budgetLoader, commonL
    }, [fetchBudget, fetchBudgetedCategories, fetchAllCategories])
    const isBudgetLoaded = useMemo(() => !!budgetLoader && Object.keys(budgetLoader).length === 0, [budgetLoader])
    const isCommonLoaded = useMemo(() => !!commonLoader && Object.keys(commonLoader).length === 0, [commonLoader])
-   isBudgetLoaded ? console.log(budget, budgetCategories) : console.log('loading budget...')
-   isCommonLoaded ? console.log(allCategories) : console.log('loading allCategories...')
+   // isBudgetLoaded ? console.log(budget, budgetCategories) : console.log('loading budget...')
+   // isCommonLoaded ? console.log(allCategories) : console.log('loading allCategories...')
    return (
       <>
+         <CategoryList />
          <FlexContainer>
             <section>
                {isBudgetLoaded ? (

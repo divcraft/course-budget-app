@@ -8,7 +8,7 @@ import { FlexContainer } from './Budget.css'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
-const Budget = ({ budget, budgetCategories, allCategories, budgetLoader, commonLoader,
+const Budget = ({ budgetLoader, commonLoader,
    fetchBudget, fetchBudgetedCategories, fetchAllCategories }) => {
    useEffect(() => {
       fetchBudget(1)
@@ -17,35 +17,16 @@ const Budget = ({ budget, budgetCategories, allCategories, budgetLoader, commonL
    }, [fetchBudget, fetchBudgetedCategories, fetchAllCategories])
    const isBudgetLoaded = useMemo(() => !!budgetLoader && Object.keys(budgetLoader).length === 0, [budgetLoader])
    const isCommonLoaded = useMemo(() => !!commonLoader && Object.keys(commonLoader).length === 0, [commonLoader])
-   // isBudgetLoaded ? console.log(budget, budgetCategories) : console.log('loading budget...')
-   // isCommonLoaded ? console.log(allCategories) : console.log('loading allCategories...')
+   const isDataLoaded = useMemo(() => isBudgetLoaded && isCommonLoaded, [isBudgetLoaded, isCommonLoaded])
    return (
       <>
-         <CategoryList />
+
          <FlexContainer>
             <section>
-               {isBudgetLoaded ? (
-                  <>
-                     <p>{budget.id}</p>
-                     <p>{budget.name}</p>
-                     <p>{budget.totalAmount}</p>
-                  </>
-               ) : (
-                     <LoadingIndicator />
-                  )}
+               {isDataLoaded ? <CategoryList /> : <LoadingIndicator />}
             </section>
             <section>
-               {isCommonLoaded ? (
-                  <ul>
-                     {allCategories.map(category => (
-                        <li key={category.id}>
-                           <p>{category.name}</p>
-                        </li>
-                     ))}
-                  </ul>
-               ) : (
-                     <LoadingIndicator />
-                  )}
+               {isDataLoaded ? <div>Main content</div> : <LoadingIndicator />}
             </section>
          </FlexContainer>
 

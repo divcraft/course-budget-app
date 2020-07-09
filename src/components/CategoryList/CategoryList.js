@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { groupBy } from 'lodash';
+import { groupBy } from 'lodash';
 
 const CategoryList = ({ budgetCategories, allCategories }) => {
+
+   const groupedCategories = groupBy(
+      budgetCategories,
+      item => allCategories.find(category => category.id === item.categoryId).parentCategory.name
+   )
+
    console.log(budgetCategories)
    console.log(allCategories)
-   // const groupedCategories = groupBy(
-   //    budgetCategories,
-   //    item => allCategories.find(category => category.id === item.categoryId).parentCategory.name
-   // )
-   // console.log(groupedCategories)
+   console.log('grouped:', groupedCategories)
+
    return (
       <div>CategoryList</div>
    );

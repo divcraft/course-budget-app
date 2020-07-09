@@ -32,14 +32,14 @@ function budget(state = initialState, action) {
          return {
             ...state,
             budget: action.payload,
-            loadingState: newLoadingState
+            loadingState: null
          }
       case BUDGET_GET_FAILURE:
          delete newLoadingState.BUDGET_GET_REQUEST
          return {
             ...state,
             budget: {},
-            loadingState: newLoadingState
+            loadingState: null
          }
       case BUDGETED_CATEGORIES_GET_REQUEST:
          return {

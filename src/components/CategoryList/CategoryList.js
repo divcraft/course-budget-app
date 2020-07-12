@@ -4,15 +4,16 @@ import { groupBy } from 'lodash';
 
 import DropDownList from 'components/DropDownList'
 
-const CategoryList = ({ budgetCategories, allCategories }) => {
+const CategoryList = ({ budgetCategories, allCategories, budget }) => {
    let groupedCategories = groupBy(
       budgetCategories,
       item => allCategories.find(category => category.id === item.categoryId).parentCategory.name
    )
-   groupedCategories = Object.entries(groupedCategories).map(([parentName, parentCategories]) => ({
+   groupedCategories = Object.entries(groupedCategories).map(([parentName, categories]) => ({
       id: parentName,
       parentName,
-      parentCategories: parentCategories.map(item => allCategories.find(category => category.id === item.categoryId))
+      amountCategories: categories,
+      categories: categories.map(item => allCategories.find(category => category.id === item.categoryId))
    }))
    return (
       <>
@@ -20,17 +21,20 @@ const CategoryList = ({ budgetCategories, allCategories }) => {
             <DropDownList
                key={category.id}
                parentName={category.parentName}
-               parentCategories={category.parentCategories} />
+               categories={category.categories}
+               amountCategories={category.amountCategories}
+               transactions={budget.transactions} />
          ))}
       </>
    );
 }
 
 export default connect(state => {
-   const { budgetCategories } = state.budget
+   const { budgetCategories, budget } = state.budget
    const { allCategories } = state.common
    return {
       budgetCategories,
-      allCategories
+      allCategories,
+      budget
    }
 })(CategoryList)

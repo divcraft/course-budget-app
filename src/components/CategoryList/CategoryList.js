@@ -9,11 +9,18 @@ const CategoryList = ({ budgetCategories, allCategories }) => {
       budgetCategories,
       item => allCategories.find(category => category.id === item.categoryId).parentCategory.name
    )
-   groupedCategories = Object.entries(groupedCategories)
+   groupedCategories = Object.entries(groupedCategories).map(([parentName, parentCategories]) => ({
+      id: parentName,
+      parentName,
+      parentCategories: parentCategories.map(item => allCategories.find(category => category.id === item.categoryId))
+   }))
    return (
       <>
          {groupedCategories.map(category => (
-            <DropDownList key={category[0]} listItems={category} />
+            <DropDownList
+               key={category.id}
+               parentName={category.parentName}
+               parentCategories={category.parentCategories} />
          ))}
       </>
    );

@@ -1,25 +1,14 @@
 import React, { useState } from 'react';
 
-const DropDownListItem = ({ listItems, listItem }) => {
+const DropDownList = ({ parentName, parentCategories }) => {
    const [isActive, setIsActive] = useState(false)
+   const categoryList = parentCategories.map(category => <div key={category.id} >{category.name}</div>)
    return (
       <div>
-         <button onClick={() => setIsActive(!isActive)}>{listItems[0]}</button>
+         <button onClick={() => setIsActive(!isActive)}>{parentName}</button>
          {isActive && (
-            <div>{listItem.budget}</div>
+            <div>{categoryList}</div>
          )}
-      </div>
-   );
-}
-
-const DropDownList = ({ listItems }) => {
-   // console.log(listItems)
-   const mappedList = listItems[1].map(listItem => (
-      <DropDownListItem key={listItem.id} listItems={listItems} listItem={listItem} />
-   ))
-   return (
-      <div>
-         {mappedList}
       </div>
    );
 }

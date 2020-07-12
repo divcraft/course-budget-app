@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { formatCurrency } from 'utils';
 
 const DropDownList = ({ parentName, categories, amountCategories, transactions }) => {
    const [isActive, setIsActive] = useState(false)
@@ -23,7 +24,7 @@ const DropDownList = ({ parentName, categories, amountCategories, transactions }
       <div>
          <div>
             <button onClick={() => setIsActive(!isActive)}>{parentName}</button>
-            <span className="left-value">{categoryLeftValue}</span>
+            <span className="left-value">{formatCurrency(categoryLeftValue)}</span>
          </div>
          {isActive && (
             <div>{categoryList}</div>

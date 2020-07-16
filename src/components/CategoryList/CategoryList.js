@@ -9,22 +9,28 @@ const CategoryList = ({ budgetCategories, allCategories, budget }) => {
       budgetCategories,
       item => allCategories.find(category => category.id === item.categoryId).parentCategory.name
    )
-   groupedCategories = Object.entries(groupedCategories).map(([parentName, categories]) => ({
-      id: parentName,
-      parentName,
-      amountCategories: categories,
-      categories: categories.map(item => allCategories.find(category => category.id === item.categoryId))
-   }))
+   groupedCategories = Object.entries(groupedCategories).map(([parentName, categories]) => {
+      return {
+         id: parentName,
+         parentName,
+         amountCategories: categories,
+         categories: categories.map(item => allCategories.find(category => category.id === item.categoryId))
+      }
+   })
    return (
       <>
-         {groupedCategories.map(category => (
-            <DropDownList
-               key={category.id}
-               parentName={category.parentName}
-               categories={category.categories}
-               amountCategories={category.amountCategories}
-               transactions={budget.transactions} />
-         ))}
+         {groupedCategories.map(category => {
+            return (
+               <DropDownList
+                  key={category.id}
+                  parentName={category.parentName}
+                  categories={category.categories}
+                  amountCategories={category.amountCategories}
+                  transactions={budget.transactions}
+               />
+            )
+         }
+         )}
       </>
    );
 }

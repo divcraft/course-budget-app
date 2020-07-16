@@ -1,34 +1,27 @@
-import React, { useState, useMemo } from 'react';
-import { formatCurrency } from 'utils';
+import React, { useState } from 'react';
+import ParentCategory from './ParentCategory'
+import ChildrenCategory from './ChildrenCategory'
 
 const DropDownList = ({ parentName, categories, amountCategories, transactions }) => {
    const [isActive, setIsActive] = useState(false)
-   const categoryList = categories.map(category => <div key={category.id} >{category.name}</div>)
-   const categoryLeftValue = useMemo(() => {
-      const budgeted = (() => {
-         try {
-            return amountCategories.reduce((acc, category) => acc + category.budget, 0)
-         } catch (err) {
-            return null
-         }
-      })()
-      const parentCategoryTransactions = transactions.filter(
-         transaction => amountCategories.find(
-            category => category.categoryId === transaction.categoryId)
-      )
-      const spentOnParentCategory = parentCategoryTransactions.reduce((acc, item) => acc + item.amount, 0)
-      const totalLeft = budgeted ? (budgeted - spentOnParentCategory).toFixed(2) : null
-      return totalLeft
-   }, [amountCategories, transactions])
+   const childrenCategory = categories.map(category => (
+      <ChildrenCategory
+         key={category.id}
+         name={category.name}
+         transactions={transactions}
+         itemCategory={amountCategories.find(item => item.id === category.id)}
+      />
+   ))
+   const handleDropDownList = () => setIsActive(!isActive)
    return (
       <div>
-         <div>
-            <button onClick={() => setIsActive(!isActive)}>{parentName}</button>
-            <span className="left-value">{formatCurrency(categoryLeftValue)}</span>
-         </div>
-         {isActive && (
-            <div>{categoryList}</div>
-         )}
+         <ParentCategory
+            handleDropDownList={handleDropDownList}
+            amountCategories={amountCategories}
+            transactions={transactions}
+            parentName={parentName}
+         />
+         {isActive && childrenCategory}
       </div>
    );
 }

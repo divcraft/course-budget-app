@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { groupBy } from 'lodash';
+import { formatCurrency } from 'utils';
 
 import DropDownList from 'components/DropDownList'
 
@@ -17,8 +18,13 @@ const CategoryList = ({ budgetCategories, allCategories, budget }) => {
          categories: categories.map(item => allCategories.find(category => category.id === item.categoryId))
       }
    })
+   const totalSpent = budget.transactions.reduce((acc, transaction) => acc + transaction.amount, 0)
+   const restToSpend = budget.totalAmount - totalSpent
    return (
       <>
+         <div>
+            {budget.name} | <span>{formatCurrency(restToSpend)}</span>
+         </div>
          {groupedCategories.map(category => {
             return (
                <DropDownList

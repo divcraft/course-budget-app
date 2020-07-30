@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import CategoryList from 'components/CategoryList'
+import CategoryList from 'components/CategoryList';
+import TransactionList from 'components/TransactionList';
 
 import { connect } from 'react-redux';
 import { fetchBudget, fetchBudgetedCategories, fetchAllCategories } from 'store/actions';
@@ -20,16 +21,14 @@ const Budget = ({ budgetLoader, commonLoader,
    const isDataLoaded = useMemo(() => isBudgetLoaded && isCommonLoaded, [isBudgetLoaded, isCommonLoaded])
    return (
       <>
-
          <FlexContainer>
             <section>
                {isDataLoaded ? <CategoryList /> : <LoadingIndicator />}
             </section>
             <section>
-               {isDataLoaded ? <div>Main content</div> : <LoadingIndicator />}
+               {isDataLoaded ? <TransactionList /> : <LoadingIndicator />}
             </section>
          </FlexContainer>
-
       </>
    );
 }
